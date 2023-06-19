@@ -1,0 +1,35 @@
+name: Build and Package
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: 11
+
+      - name: Build with Gradle
+        run: ./gradlew build
+
+      - name: Package JAR
+        run: ./gradlew assemble
+
+      - name: Run security checks
+        uses: dependency-check/action@v3
+        with:
+          format: 'ALL'
+          output-format: 'HTML'
+          fail-build: true
