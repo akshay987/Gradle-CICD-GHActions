@@ -5,8 +5,8 @@ on:
     branches:
       - master
 
-env:
-  GRADLE_OPTS: -Dorg.gradle.console=plain
+#env:
+  #GRADLE_OPTS: -Dorg.gradle.console=plain
 
 jobs:
   build:
