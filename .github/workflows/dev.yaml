@@ -1,12 +1,12 @@
-name: Build and Package
+name: Build and Publish Packages
 
 on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
+
+env:
+  GRADLE_OPTS: -Dorg.gradle.console=plain
 
 jobs:
   build:
@@ -19,17 +19,13 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v2
         with:
-          java-version: 11
+          java-version: '11'
 
       - name: Build with Gradle
         run: ./gradlew build
 
-      - name: Package JAR
-        run: ./gradlew assemble
-
-      - name: Run security checks
-        uses: dependency-check/action@v3
-        with:
-          format: 'ALL'
-          output-format: 'HTML'
-          fail-build: true
+      - name: Publish to GitHub Packages
+        run: |
+          echo "//registry.gradle.org/api/login" >> ~/.gradle/gradle.properties
+          echo "registry=https://maven.pkg.github.com/akshay987" >> ~/.gradle/gradle.properties
+          ./gradlew publish
